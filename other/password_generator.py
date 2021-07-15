@@ -16,7 +16,7 @@ def password_generator(length=8):
     >>> len(password_generator(-1))
     0
     """
-    chars = tuple(ascii_letters) + tuple(digits) + tuple(punctuation)
+    chars = ascii_letters + digits + punctuation
     return "".join(choice(chars) for x in range(length))
 
 
@@ -30,7 +30,8 @@ def alternative_password_generator(ctbi, i):
     i = i - len(ctbi)
     quotient = int(i / 3)
     remainder = i % 3
-    # chars = ctbi + random_letters(ascii_letters, i / 3 + remainder) + random_number(digits, i / 3) + random_characters(punctuation, i / 3)
+    # chars = ctbi + random_letters(ascii_letters, i / 3 + remainder) +
+    #     random_number(digits, i / 3) + random_characters(punctuation, i / 3)
     chars = (
         ctbi
         + random(ascii_letters, quotient + remainder)
