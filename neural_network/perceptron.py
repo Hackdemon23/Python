@@ -11,7 +11,14 @@ import random
 
 
 class Perceptron:
-    def __init__(self, sample, target, learning_rate=0.01, epoch_number=1000, bias=-1):
+    def __init__(
+        self,
+        sample: list[list[float]],
+        target: list[int],
+        learning_rate: float = 0.01,
+        epoch_number: int = 1000,
+        bias: float = -1,
+    ) -> None:
         """
         Initializes a Perceptron network for oil analysis
         :param sample: sample dataset of 3 parameters with shape [30,3]
@@ -19,23 +26,34 @@ class Perceptron:
         :param learning_rate: learning rate used in optimizing.
         :param epoch_number: number of epochs to train network on.
         :param bias: bias value for the network.
+
+        >>> p = Perceptron([], (0, 1, 2))
+        Traceback (most recent call last):
+        ...
+        ValueError: Sample data can not be empty
+        >>> p = Perceptron(([0], 1, 2), [])
+        Traceback (most recent call last):
+        ...
+        ValueError: Target data can not be empty
+        >>> p = Perceptron(([0], 1, 2), (0, 1))
+        Traceback (most recent call last):
+        ...
+        ValueError: Sample data and Target data do not have matching lengths
         """
         self.sample = sample
         if len(self.sample) == 0:
-            raise AttributeError("Sample data can not be empty")
+            raise ValueError("Sample data can not be empty")
         self.target = target
         if len(self.target) == 0:
-            raise AttributeError("Target data can not be empty")
+            raise ValueError("Target data can not be empty")
         if len(self.sample) != len(self.target):
-            raise AttributeError(
-                "Sample data and Target data do not have matching lengths"
-            )
+            raise ValueError("Sample data and Target data do not have matching lengths")
         self.learning_rate = learning_rate
         self.epoch_number = epoch_number
         self.bias = bias
         self.number_sample = len(sample)
         self.col_sample = len(sample[0])  # number of columns in dataset
-        self.weight = []
+        self.weight: list = []
 
     def training(self) -> None:
         """
@@ -76,14 +94,14 @@ class Perceptron:
                     has_misclassified = True
             # print('Epoch: \n',epoch_count)
             epoch_count = epoch_count + 1
-            # if you want controle the epoch or just by erro
+            # if you want control the epoch or just by error
             if not has_misclassified:
                 print(("\nEpoch:\n", epoch_count))
                 print("------------------------\n")
-                # if epoch_count > self.epoch_number or not erro:
+                # if epoch_count > self.epoch_number or not error:
                 break
 
-    def sort(self, sample) -> None:
+    def sort(self, sample: list[float]) -> None:
         """
         :param sample: example row to classify as P1 or P2
         :return: None
@@ -98,7 +116,7 @@ class Perceptron:
         classification: P...
         """
         if len(self.sample) == 0:
-            raise AttributeError("Sample data can not be empty")
+            raise ValueError("Sample data can not be empty")
         sample.insert(0, self.bias)
         u = 0
         for i in range(self.col_sample + 1):
@@ -210,11 +228,11 @@ if __name__ == "__main__":
     print("Finished training perceptron")
     print("Enter values to predict or q to exit")
     while True:
-        sample = []
+        sample: list = []
         for i in range(len(samples[0])):
-            observation = input("value: ").strip()
-            if observation == "q":
+            user_input = input("value: ").strip()
+            if user_input == "q":
                 break
-            observation = float(observation)
+            observation = float(user_input)
             sample.insert(i, observation)
         network.sort(sample)
